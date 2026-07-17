@@ -71,11 +71,23 @@ function App() {
 
       <div className="notes-grid">
         {filteredNotes.map((note) => (
-          <NoteCard key={note.id} note={note} onDelete={deleteNote} />
+          <NoteCard key={note.id} note={note} onDelete={deleteNote} onSummarize={summarizeNote}
+     />
         ))}
       </div>
     </div>
   );
+}
+
+async function summarizeNote(id) {
+  const res = await fetch(`http://localhost:3000/api/notes/${id}/summarize`, {
+    method: "POST"
+  });
+
+  const updated = await res.json();
+
+  // Replace the old note with the updated one
+  setNotes(notes.map(n => (n.id === id ? updated : n)));
 }
 
 export default App;
